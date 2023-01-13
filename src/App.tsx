@@ -1,4 +1,6 @@
+import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
+import { Router } from './Router'
 import { GlobalStyle } from './styles/global'
 import { defaultTheme } from './styles/theme/default'
 
@@ -7,9 +9,11 @@ function App() {
     <div>
       <ThemeProvider theme={defaultTheme}>
         <GlobalStyle />
-      </ThemeProvider>
 
-      <h1>Hello Github Blog</h1>
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
+      </ThemeProvider>
     </div>
   )
 }
