@@ -1,4 +1,4 @@
-import { HeaderContainer } from './styled'
+import { HeaderContainer } from './styles'
 import LogoGithubBlog from '../../assets/logo-github-blog.png'
 
 export function Header() {
