@@ -4,7 +4,9 @@ import { LayoutContainer } from './styled'
 export function DefaultLayout() {
   return (
     <LayoutContainer>
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
     </LayoutContainer>
   )
 }
