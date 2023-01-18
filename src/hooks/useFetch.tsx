@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { useCallback, useState } from 'react'
+import { api } from '../lib/api'
 
 export interface UserDataProps {
   bio: string
@@ -25,14 +25,12 @@ interface IssueProps {
 }
 
 export function useFetch() {
-  const baseURL = 'https://api.github.com'
-
   const [userData, setUserData] = useState<UserDataProps>({} as UserDataProps)
   const [issueData, setIssueData] = useState<IssueProps>({} as IssueProps)
 
   const getUseData = useCallback(async () => {
     try {
-      const response = await axios.get(`${baseURL}/users/joalissongomes1994`)
+      const response = await api.get(`/users/joalissongomes1994`)
       const { data } = response
 
       setUserData(data)
@@ -45,14 +43,12 @@ export function useFetch() {
 
   const getIssues = useCallback(async (issueName: string) => {
     try {
-      if (issueName.length === 0 || issueName.length > 4) {
-        const response = await axios.get(
-          `${baseURL}/search/issues?q=${issueName}%20repo:joalissongomes1994/github-blog`,
-        )
-        const { data } = response
+      const response = await api.get(
+        `/search/issues?q=${issueName}%20repo:joalissongomes1994/github-blog`,
+      )
+      const { data } = response
 
-        data && setIssueData(data)
-      }
+      data && setIssueData(data)
 
       return true
     } catch (error) {
