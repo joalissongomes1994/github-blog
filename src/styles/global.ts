@@ -6,6 +6,11 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+
+  :focus {
+    outline: none;
+    border: 1px solid ${(props) => props.theme.blue};
+  }
   
   body {
     background-color: ${(props) => props.theme['base-background']};
