@@ -18,6 +18,12 @@ export interface IssueDataProps {
   created_at: string
 }
 
+export interface IssueDetailsProps extends IssueDataProps {
+  user: { login?: string }
+  html_url: string
+  comments: number
+}
+
 interface IssueProps {
   incomplete_results: boolean
   items: IssueDataProps[]
@@ -27,6 +33,9 @@ interface IssueProps {
 export function useFetch() {
   const [userData, setUserData] = useState<UserDataProps>({} as UserDataProps)
   const [issueData, setIssueData] = useState<IssueProps>({} as IssueProps)
+  const [issueDetails, setIssueDetails] = useState<IssueDetailsProps>(
+    {} as IssueDetailsProps,
+  )
 
   const getUseData = useCallback(async () => {
     try {
@@ -56,5 +65,20 @@ export function useFetch() {
     }
   }, [])
 
-  return { getUseData, getIssues, userData, issueData }
+  const getIssue = useCallback(async (issueNumber: string = '') => {
+    try {
+      const response = await api.get(
+        `/repos/joalissongomes1994/github-blog/issues/${issueNumber}`,
+      )
+      const { data } = response
+
+      data && setIssueDetails(data)
+
+      return true
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
+  return { getUseData, getIssues, getIssue, userData, issueData, issueDetails }
 }
