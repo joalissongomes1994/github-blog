@@ -1,34 +1,38 @@
 import axios from 'axios'
 import { useCallback, useState } from 'react'
 
-export interface IUserData {
-  avatar_url: string
-  html_url: string
+export interface UserDataProps {
   bio: string
-  company: string
-  created_at: string
-  email: string | null
-  followers: number
-  followers_url: string
-  following: number
-  following_url: string
-  id: number
-  login: string
   name: string
-  public_repos: string
-  repos_url: string
-  type: string
-  updated_at: string
+  login: string
+  company: string
+  html_url: string
+  followers: number
+  avatar_url: string
+}
+
+export interface IssueDataProps {
+  body: string
+  title: string
+  number: number
+  created_at: string
+}
+
+interface IssueProps {
+  incomplete_results: boolean
+  items: IssueDataProps[]
+  total_count: number
 }
 
 export function useFetch() {
   const baseURL = 'https://api.github.com'
 
-  const [userData, setUserData] = useState<IUserData>({} as IUserData)
+  const [userData, setUserData] = useState<UserDataProps>({} as UserDataProps)
+  const [issueData, setIssueData] = useState<IssueProps>({} as IssueProps)
 
-  const getUseData = useCallback(async (username: string) => {
+  const getUseData = useCallback(async () => {
     try {
-      const response = await axios.get(`${baseURL}/users/${username}`)
+      const response = await axios.get(`${baseURL}/users/joalissongomes1994`)
       const { data } = response
 
       setUserData(data)
@@ -39,5 +43,20 @@ export function useFetch() {
     }
   }, [])
 
-  return { getUseData, userData }
+  const getIssues = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `${baseURL}/search/issues?q=%20repo:joalissongomes1994/github-blog`,
+      )
+      const { data } = response
+
+      data && setIssueData(data)
+
+      return true
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
+  return { getUseData, getIssues, userData, issueData }
 }
