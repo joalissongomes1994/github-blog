@@ -1,5 +1,6 @@
 import { createRef, FormEvent, useEffect, useState } from 'react'
 import { Input } from '../../components/Input'
+import { Loading } from '../../components/Loading'
 import { useFetch } from '../../hooks/useFetch'
 import { Card } from './components/Card'
 import { Profile } from './components/Profile'
@@ -7,7 +8,14 @@ import { Profile } from './components/Profile'
 import { IssuesGrid, WrapperInput } from './styles'
 
 export function Blog() {
-  const { getUseData, getIssues, userData, issueData } = useFetch()
+  const {
+    getUseData,
+    getIssues,
+    userData,
+    issueData,
+    isLoadingPage,
+    isLoadingSearch,
+  } = useFetch()
   const totalPublications = issueData.total_count
 
   const [issueName, setIssueName] = useState<string>('')
@@ -27,6 +35,10 @@ export function Blog() {
   useEffect(() => {
     getIssues(issueName)
   }, [getIssues, issueName])
+
+  if (isLoadingPage) {
+    return <Loading />
+  }
 
   return (
     <div>
@@ -51,12 +63,16 @@ export function Blog() {
         </form>
       </WrapperInput>
 
-      <IssuesGrid>
-        {issueData.items?.length > 0 &&
-          issueData.items.map((item, index) => (
-            <Card key={item.body} dataCard={item} />
-          ))}
-      </IssuesGrid>
+      {isLoadingSearch ? (
+        <Loading />
+      ) : (
+        <IssuesGrid>
+          {issueData.items?.length > 0 &&
+            issueData.items.map((item, index) => (
+              <Card key={item.body} dataCard={item} />
+            ))}
+        </IssuesGrid>
+      )}
     </div>
   )
 }

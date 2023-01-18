@@ -31,6 +31,8 @@ interface IssueProps {
 }
 
 export function useFetch() {
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false)
+  const [isLoadingSearch, setIsLoadingSearch] = useState<boolean>(false)
   const [userData, setUserData] = useState<UserDataProps>({} as UserDataProps)
   const [issueData, setIssueData] = useState<IssueProps>({} as IssueProps)
   const [issueDetails, setIssueDetails] = useState<IssueDetailsProps>(
@@ -39,19 +41,26 @@ export function useFetch() {
 
   const getUseData = useCallback(async () => {
     try {
+      setIsLoadingPage(true)
+
       const response = await api.get(`/users/joalissongomes1994`)
       const { data } = response
 
       setUserData(data)
 
+      setIsLoadingPage(false)
+
       return true
     } catch (error) {
       console.log(error)
+      setIsLoadingPage(false)
     }
   }, [])
 
   const getIssues = useCallback(async (issueName: string) => {
     try {
+      setIsLoadingSearch(true)
+
       const response = await api.get(
         `/search/issues?q=${issueName}%20repo:joalissongomes1994/github-blog`,
       )
@@ -59,14 +68,19 @@ export function useFetch() {
 
       data && setIssueData(data)
 
+      setIsLoadingSearch(false)
+
       return true
     } catch (error) {
       console.log(error)
+      setIsLoadingSearch(false)
     }
   }, [])
 
   const getIssue = useCallback(async (issueNumber: string = '') => {
     try {
+      setIsLoadingPage(true)
+
       const response = await api.get(
         `/repos/joalissongomes1994/github-blog/issues/${issueNumber}`,
       )
@@ -74,11 +88,23 @@ export function useFetch() {
 
       data && setIssueDetails(data)
 
+      setIsLoadingPage(false)
+
       return true
     } catch (error) {
       console.log(error)
+      setIsLoadingPage(false)
     }
   }, [])
 
-  return { getUseData, getIssues, getIssue, userData, issueData, issueDetails }
+  return {
+    getUseData,
+    getIssues,
+    getIssue,
+    userData,
+    issueData,
+    issueDetails,
+    isLoadingPage,
+    isLoadingSearch,
+  }
 }
