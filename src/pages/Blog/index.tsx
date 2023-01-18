@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { createRef, FormEvent, useEffect, useState } from 'react'
 import { Input } from '../../components/Input'
 import { useFetch } from '../../hooks/useFetch'
 import { Card } from './components/Card'
@@ -10,13 +10,23 @@ export function Blog() {
   const { getUseData, getIssues, userData, issueData } = useFetch()
   const totalPublications = issueData.total_count
 
+  const [issueName, setIssueName] = useState<string>('')
+  const issueRef = createRef<HTMLInputElement>()
+
+  function handleIssueSearchSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    issueRef.current?.value && setIssueName(issueRef.current?.value)
+    !issueRef.current?.value && setIssueName('')
+  }
+
   useEffect(() => {
     getUseData()
   }, [getUseData])
 
   useEffect(() => {
-    getIssues()
-  }, [getIssues])
+    getIssues(issueName)
+  }, [getIssues, issueName])
 
   return (
     <div>
@@ -31,7 +41,14 @@ export function Blog() {
               : `nenhuma publicação`}
           </span>
         </div>
-        <Input placeholder="Buscar conteúdo" />
+
+        <form action="" onSubmit={handleIssueSearchSubmit}>
+          <Input
+            placeholder="Buscar conteúdo"
+            name="test"
+            issueRef={issueRef}
+          />
+        </form>
       </WrapperInput>
 
       <IssuesGrid>

@@ -43,14 +43,16 @@ export function useFetch() {
     }
   }, [])
 
-  const getIssues = useCallback(async () => {
+  const getIssues = useCallback(async (issueName: string) => {
     try {
-      const response = await axios.get(
-        `${baseURL}/search/issues?q=%20repo:joalissongomes1994/github-blog`,
-      )
-      const { data } = response
+      if (issueName.length === 0 || issueName.length > 4) {
+        const response = await axios.get(
+          `${baseURL}/search/issues?q=${issueName}%20repo:joalissongomes1994/github-blog`,
+        )
+        const { data } = response
 
-      data && setIssueData(data)
+        data && setIssueData(data)
+      }
 
       return true
     } catch (error) {
