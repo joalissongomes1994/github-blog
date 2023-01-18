@@ -3,9 +3,8 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import 'github-markdown-css'
 import { IssueDataProps } from '../../../../hooks/useFetch'
-import { formatDistanceToNow } from 'date-fns'
-import BR from 'date-fns/locale/pt-BR'
 import { useNavigate } from 'react-router-dom'
+import { dateFormatter } from '../../../../lib/formatter'
 
 interface CardProps {
   dataCard: IssueDataProps
@@ -14,12 +13,7 @@ interface CardProps {
 export function Card({ dataCard }: CardProps) {
   const navigate = useNavigate()
 
-  const published =
-    dataCard.created_at &&
-    formatDistanceToNow(new Date(dataCard.created_at), {
-      addSuffix: true,
-      locale: BR,
-    })
+  const published = dataCard.created_at && dateFormatter(dataCard.created_at)
 
   function handleNavigate() {
     navigate(`post/${dataCard.number}`)

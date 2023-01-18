@@ -3,8 +3,7 @@ import { Content, PostInfoContainer } from './styles'
 import { BsBoxArrowUpRight, BsGithub, BsChevronLeft } from 'react-icons/bs'
 import { FaCalendarDay, FaComment } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
-import { formatDistanceToNow } from 'date-fns'
-import BR from 'date-fns/locale/pt-BR'
+import { dateFormatter } from '../../../../lib/formatter'
 
 interface PostInfoProps {
   data: IssueDetailsProps
@@ -13,12 +12,7 @@ interface PostInfoProps {
 export function PostInfo({ data }: PostInfoProps) {
   const navigate = useNavigate()
 
-  const published =
-    data.created_at &&
-    formatDistanceToNow(new Date(data.created_at), {
-      addSuffix: true,
-      locale: BR,
-    })
+  const published = data.created_at && dateFormatter(data.created_at)
 
   function handleNavigate() {
     navigate(-1)
