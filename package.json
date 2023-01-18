@@ -13,10 +13,15 @@
   "dependencies": {
     "@types/styled-components": "^5.1.26",
     "axios": "^1.2.2",
+    "date-fns": "^2.29.3",
+    "github-markdown-css": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
+    "react-markdown": "^8.0.4",
+    "react-markdown-github": "^3.3.1",
     "react-router-dom": "^6.6.2",
+    "remark-gfm": "^3.0.1",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {
